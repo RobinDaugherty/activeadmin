@@ -1,0 +1,16 @@
+version: 2
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+build:
+  os: ubuntu-24.04
+  tools:
+    nodejs: "latest"
+  jobs:
+    install:
+      - corepack use yarn@1.22
+      - corepack yarn install
+    build:
+      html:
+        - corepack yarn docs:build
+        - mkdir -p $READTHEDOCS_OUTPUT/
+        - mv docs/.vitepress/dist $READTHEDOCS_OUTPUT/html
+

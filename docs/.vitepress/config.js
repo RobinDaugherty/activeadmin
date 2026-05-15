@@ -1,8 +1,30 @@
 import { version } from '../../package.json'
 import { defineConfig } from 'vitepress'
 
+function baseUrl() {
+  // Readthedocs gives us the canonical URL
+  const readTheDocsUrl = process.env.READTHEDOCS_CANONICAL_URL
+  // But in other systems, we can set DOCS_BASE_URL if the site is not served
+  // at the root of the host (this can just be a path)
+  const path = readTheDocsUrl
+    ? new URL(readTheDocsUrl).pathname
+    : process.env.DOCS_BASE_URL
+
+  if (!path) return '/'
+
+  // VitePress requires base to start and end with /
+  return path.replace(/\/$/g, '') + '/'
+}
+
+const base = baseUrl()
+
+console.log(`DOCS_BASE_URL is ${process.env.DOCS_BASE_URL}`)
+console.log(`READTHEDOCS_CANONICAL_URL is ${process.env.READTHEDOCS_CANONICAL_URL}`)
+console.log(`Base URL is ${base}`)
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  base,
   title: "ActiveAdmin",
   description: "The administration framework for business critical Ruby on Rails applications.",
   head: [
